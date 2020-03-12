@@ -1,8 +1,9 @@
 <launch>
   <!-- master DAVIS -->
   <node ns="davis_left" name="davis_ros_driver" pkg="davis_ros_driver" type="davis_ros_driver" output="screen">
-    <param name="serial_number" type="str" value="02460074" />
-    <rosparam command="load" file="$(find davis_ros_driver)/config/DAVIS240C.yaml" />
+    <!--param name="serial_number" type="str" value="02460074" /-->
+    <param name="serial_number" type="str" value="00000128" />
+    <rosparam command="load" file="$(find davis_ros_driver)/config/standard.yaml"/>
     <param name="master" value="True"/>
 
     <!-- timeout before resetting time -->
@@ -11,8 +12,9 @@
 
   <!-- slave DAVIS -->
   <node ns="davis_right" name="davis_ros_driver" pkg="davis_ros_driver" type="davis_ros_driver" output="screen">
-    <param name="serial_number" type="str" value="84010026" />
-    <rosparam command="load" file="$(find davis_ros_driver)/config/DAVIS240C.yaml" />
+    <!--param name="serial_number" type="str" value="84010026" /-->
+    <param name="serial_number" type="str" value="00000127" />
+    <rosparam command="load" file="$(find davis_ros_driver)/config/standard.yaml"/>
     <param name="master" value="False"/>
 
     <!-- get reset signal from master -->

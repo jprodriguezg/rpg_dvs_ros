@@ -104,6 +104,7 @@ private:
 
   bool parameter_update_required_;
   bool parameter_bias_update_required_;
+  bool flipImageX_, flipImageY_;
 
 };
 

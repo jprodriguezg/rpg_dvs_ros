@@ -38,6 +38,9 @@ DavisRosDriver::DavisRosDriver(ros::NodeHandle & nh, ros::NodeHandle nh_private)
   nh_private.param<double>("reset_timestamps_delay", reset_timestamps_delay, -1.0);
   nh_private.param<int>("imu_calibration_sample_size", imu_calibration_sample_size_, 1000);
 
+  nh_private.param<bool>("flipImageX", flipImageX_, false);
+  nh_private.param<bool>("flipImageY", flipImageY_, false);
+
   // initialize bias
   nh_private.param<double>("imu_bias/ax", bias.linear_acceleration.x, 0.0);
   nh_private.param<double>("imu_bias/ay", bias.linear_acceleration.y, 0.0);
@@ -678,8 +681,14 @@ void DavisRosDriver::readout()
                         caerPolarityEvent event = caerPolarityEventPacketGetEvent(polarity, j);
 
                         dvs_msgs::Event e;
-                        e.x = caerPolarityEventGetX(event);
-                        e.y = caerPolarityEventGetY(event);
+                        if(flipImageX_)
+                          e.x = davis_info_.dvsSizeX -1 - caerPolarityEventGetX(event);
+                        else
+                          e.x = caerPolarityEventGetX(event);
+                        if(flipImageY_)
+                          e.y = davis_info_.dvsSizeY -1 - caerPolarityEventGetY(event);
+                        else
+                          e.y = caerPolarityEventGetY(event); 
                         e.ts = reset_time_
                                 + ros::Duration().fromNSec(caerPolarityEventGetTimestamp64(event, polarity) * 1000);
                         e.polarity = caerPolarityEventGetPolarity(event);
@@ -807,7 +816,17 @@ void DavisRosDriver::readout()
                     {
                         for (int img_x=0; img_x<frame_width; img_x++)
                         {
-                            const uint16_t value = image[img_y*frame_width + img_x];
+                            int cust_img_y, cust_img_x;
+                            if(flipImageX_)
+                              cust_img_x = frame_width - 1 - img_x;
+                            else
+                              cust_img_x = img_x;  
+                            if(flipImageY_)
+                              cust_img_y = frame_height - 1 - img_y;
+                            else
+                              cust_img_y = img_y;
+
+                            const uint16_t value = image[cust_img_y*frame_width + cust_img_x];
                             msg.data.push_back(value >> 8);
                         }
                     }
