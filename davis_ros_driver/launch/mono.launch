@@ -3,8 +3,9 @@
   <node name="davis_ros_driver" pkg="davis_ros_driver" type="davis_ros_driver" output="screen">
     <!--param name="serial_number" type="str" value="02460074" /-->
     <param name="serial_number" type="str" value="00000127" />
-    <param name="flipImageX" type="bool" value="False" />
-    <param name="flipImageY" type="bool" value="False" />
+    <param name="flipImageX" type="bool" value="True" />
+    <param name="flipImageY" type="bool" value="True" />
+    <param name="autoexposure_enabled" type="bool" value="True" />
     <!--rosparam command="load" file="$(find davis_ros_driver)/config/standard.yaml"/>
     <param name="master" value="True"/-->
 
